@@ -13,6 +13,9 @@ model User {
   name  String
   email String @unique
 
+  username String @unique @map("login")
+  password String
+
   role   Role @relation(fields: [roleId], references: [id])
   roleId Int
 
@@ -30,6 +33,7 @@ model Profile {
   Reviews Reviews[]
   Product Product[]
   History History[]
+  Liked   Liked[]
 }
 
 model Role {
@@ -44,6 +48,18 @@ model Category {
   category_title String
 
   category_products Product[]
+}
+
+model Liked {
+  liked_id Int @unique @default(autoincrement())
+
+  createdAt DateTime @default(now())
+
+  product   Product @relation(fields: [productId], references: [product_id])
+  productId Int
+
+  Profile   Profile @relation(fields: [profileId], references: [profile_id])
+  profileId Int
 }
 
 model History {
@@ -67,12 +83,13 @@ model Product {
   product_value   Int
 
   product_diller     Profile   @relation(fields: [diller_profileId], references: [profile_id])
-  diller_profileId          Int
+  diller_profileId   Int
   Category           Category? @relation(fields: [product_categoryId], references: [category_id])
   product_categoryId Int?      @map("categoryId")
   product_reviews    Reviews[]
 
   History History[]
+  Liked   Liked[]
 }
 
 model Reviews {
