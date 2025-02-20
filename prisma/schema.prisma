@@ -7,7 +7,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model USER {
-  id   Int    @unique @default(autoincrement())
-  name String
+model User {
+  id Int @unique @default(autoincrement())
+
+  name  String
+  email String @unique
+
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int
+
+  profile Profile?
+}
+
+model Profile {
+  profile_id Int @unique @default(autoincrement())
+
+  profile_additional_info String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  Reviews Reviews[]
+  Product Product[]
+  History History[]
+}
+
+model Role {
+  id        Int    @unique @default(autoincrement())
+  role_name String
+  user      User[]
+}
+
+model Category {
+  category_id Int @unique @default(autoincrement())
+
+  category_title String
+
+  category_products Product[]
+}
+
+model History {
+  history_id Int @unique @default(autoincrement())
+
+  createdAt DateTime @default(now())
+
+  product   Product @relation(fields: [productId], references: [product_id])
+  productId Int
+
+  Profile   Profile @relation(fields: [profileId], references: [profile_id])
+  profileId Int
+}
+
+model Product {
+  product_id Int @unique @default(autoincrement())
+
+  product_title   String
+  product_content String
+  product_price   Float
+  product_value   Int
+
+  product_diller     Profile   @relation(fields: [diller_profileId], references: [profile_id])
+  diller_profileId          Int
+  Category           Category? @relation(fields: [product_categoryId], references: [category_id])
+  product_categoryId Int?      @map("categoryId")
+  product_reviews    Reviews[]
+
+  History History[]
+}
+
+model Reviews {
+  reivew_id Int @unique @default(autoincrement())
+
+  reivew_content String
+
+  review_profile   Profile @relation(fields: [review_profileId], references: [profile_id])
+  review_profileId Int
+
+  createdAt        DateTime @default(now())
+  //review_media Нужно будет подключить AWS
+  Product          Product? @relation(fields: [review_productId], references: [product_id])
+  review_productId Int?     @map("productId")
 }
