@@ -13,11 +13,11 @@ model User {
   name  String
   email String @unique
 
-  username String @unique @map("login")
+  username String @unique
   password String
 
   role   Role @relation(fields: [roleId], references: [id])
-  roleId Int
+  roleId Int  @default(1)
 
   profile Profile?
 }

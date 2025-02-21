@@ -1,12 +1,15 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { SignUpDto } from './auth.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  @Get(':id')
-  async getUsers(@Param('id') id: number) {
-    return this.authService.getUsers(id)
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Post('signUp')
+  async SignUp(@Body() dto: SignUpDto) {
+    return this.authService.SighUp(dto)
   }
 }
