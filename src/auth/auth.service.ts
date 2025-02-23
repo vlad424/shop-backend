@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { SignUpDto } from './auth.dto';
 import { hash } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
     const tokens = await this.issueTokens(new_user.id)
 
     return {
-      user: new_user,
+      user: this.returnUserFields(new_user),
       ...tokens
     }
   }
@@ -55,5 +56,13 @@ export class AuthService {
     })
 
     return {accessToken, refreshToken}
+  }
+  private returnUserFields(user: User) {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      username: user.username,
+    }
   }
 }
