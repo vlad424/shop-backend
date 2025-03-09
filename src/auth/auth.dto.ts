@@ -1,11 +1,12 @@
+import { Optional } from "@nestjs/common"
 import { IsEmail, IsNotEmpty, isNotEmpty, IsString, MinLength } from "class-validator"
 
-export class signInDto {
+export class SignInDto {
   username: string
-  name: string
 
-  @IsEmail({}, {message: 'Почта должна быть действительной'})
-  email: string
+  // @IsEmail({}, {message: 'Почта должна быть действительной'})
+  // @Optional()
+  // email: string
 
   @MinLength(6, {
     message: 'Пароль должен быть больше 6 символов'

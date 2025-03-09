@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, Param, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { SignUpDto } from './auth.dto';
+import { SignInDto, SignUpDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from 'src/guards/role.guard';
 import { TokenGuard } from 'src/guards/token.duard';
@@ -17,9 +17,18 @@ export class AuthController {
     return this.authService.SignUp(dto)
   }
 
+  @UsePipes(new ValidationPipe())
+  @Post('signIn') 
+  @HttpCode(200)
+  async SignIn(@Body() dto: SignInDto) {
+    return this.authService.SignIn(dto)
+  }
+
   @UseGuards(TokenGuard)
   @Post('refreshToken')
   async refreshToken(@Body() data) {
     return data
   }
+
+
 }
