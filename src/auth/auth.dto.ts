@@ -1,7 +1,10 @@
-import { IsEmail, IsNotEmpty, isNotEmpty, IsString, MinLength } from "class-validator"
+import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
 
 export class signInDto {
+  @MinLength(4, {message: "username должен быть больше 4 символов"})
   username: string
+
+  @IsNotEmpty({message: "Имя не может быть пустым"})
   name: string
 
   @IsEmail({}, {message: 'Почта должна быть действительной'})
@@ -14,10 +17,10 @@ export class signInDto {
 }
 
 export class SignUpDto {
-  @IsString({message: "Укажите username"})
+  @MinLength(4, {message: "username должен быть больше 4 символов"})
   username: string
 
-  @IsString({message: "Укажите имя"})
+  @IsNotEmpty({message: "Имя не может быть пустым"})
   name: string
   
   @IsEmail({}, {
