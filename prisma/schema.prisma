@@ -90,6 +90,8 @@ model Product {
 
   History History[]
   Liked   Liked[]
+
+  @@index([product_title, product_price])
 }
 
 model Reviews {

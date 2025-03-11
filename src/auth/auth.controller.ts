@@ -24,6 +24,13 @@ export class AuthController {
     return this.authService.SignUp(dto)
   }
 
+  @UsePipes(new ValidationPipe())
+  @Post('signIn') 
+  @HttpCode(200)
+  async SignIn(@Body() dto: SignInDto) {
+    return this.authService.SignIn(dto)
+  }
+
   @UseGuards(TokenGuard)
   @Post('refreshToken')
   async refreshToken(@Body() data) {

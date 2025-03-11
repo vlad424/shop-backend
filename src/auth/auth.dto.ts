@@ -7,8 +7,9 @@ export class signInDto {
   @IsNotEmpty({message: "Имя не может быть пустым"})
   name: string
 
-  @IsEmail({}, {message: 'Почта должна быть действительной'})
-  email: string
+  // @IsEmail({}, {message: 'Почта должна быть действительной'})
+  // @Optional()
+  // email: string
 
   @MinLength(6, {
     message: 'Пароль должен быть больше 6 символов'

@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { SignUpDto } from './auth.dto';
-import { hash } from 'argon2';
+import { SignInDto, SignUpDto } from './auth.dto';
+import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 
@@ -41,6 +41,27 @@ export class AuthService {
 
     return {
       user: this.returnUserFields(new_user),
+      ...tokens
+    }
+  }
+
+  async SignIn(dto: SignInDto) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: dto.username
+      }
+    })
+
+    if(!user) throw new NotFoundException('Такого пользователя не существует')
+    
+    const isValid = await verify(user.password, dto.password)
+
+    if(!isValid) throw new UnauthorizedException('Неправильный пароль')
+
+    const tokens = await this.issueTokens(user.id)
+
+    return {
+      user: this.returnUserFields(user),
       ...tokens
     }
   }
