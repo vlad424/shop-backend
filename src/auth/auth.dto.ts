@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
 
-export class signInDto {
+export class SignInDto {
   @MinLength(4, {message: "username должен быть больше 4 символов"})
   username: string
 
