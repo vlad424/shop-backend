@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Sse, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Req, Sse, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SignInDto, SignUpDto } from './auth.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from 'src/guards/role.guard';
 import { TokenGuard } from 'src/guards/token.duard';
 import { interval, map, Observable } from 'rxjs';
+import { AuthGuard } from '@nestjs/passport';
 
 export interface MessageEvent {
   data: string | object;
@@ -35,6 +35,16 @@ export class AuthController {
   @Post('refreshToken')
   async refreshToken(@Body() data) {
     return data
+  }
+
+  @Get('googleAuth')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {}
+
+  @Get('redirect')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req) {
+    return this.authService.googleLogin(req)
   }
 
   // @Sse('sse')
