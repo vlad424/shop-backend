@@ -4,6 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { Strategy } from 'passport-google-oauth20';
 import { PrismaService } from 'src/prisma.service';
+import { GoogleProfile } from './google.types';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any) {
-    console.log(accessToken, refreshToken, profile)
+  async validate(accessToken: string, refreshToken: string, profile: GoogleProfile) {
+    const googleUser = await this.prisma.user.create({
+      data: {
+        email: profile.emails[0].value,
+        name: profile.name.givenName,
+        password: '',
+        username: profile.name.givenName
+      }
+    })
+
+    console.log(googleUser)
   }
 }
