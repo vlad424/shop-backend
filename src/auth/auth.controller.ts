@@ -1,9 +1,8 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Req, Sse, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Req, Res, Sse, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SignInDto, SignUpDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { TokenGuard } from 'src/guards/token.duard';
-import { interval, map, Observable } from 'rxjs';
-import { AuthGuard } from '@nestjs/passport';
+import { GoogleAuthGuard } from 'src/guards/google.guard';
 
 export interface MessageEvent {
   data: string | object;
@@ -33,22 +32,22 @@ export class AuthController {
 
   @UseGuards(TokenGuard)
   @Post('refreshToken')
+  @HttpCode(200)
   async refreshToken(@Body() data) {
     return data
   }
 
-  @Get('googleAuth')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/login')
+  async googleLogin() {}
 
-  @Get('redirect')
-  @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req) {
-    return this.authService.googleLogin(req)
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/redirect')
+  async googleRedirect(@Req() req, @Res() res) {
+    const response = await this.authService.issueTokens(req.user.id)
+
+    console.log(response)
+
+    res.redirect(`http://localhost:5173?token=${response.accessToken}`)
   }
-
-  // @Sse('sse')
-  // sse(): Observable<MessageEvent> {
-  //   return interval(1000).pipe(map((_) => ({data: {hello: 'world'}})))
-  // }
 }

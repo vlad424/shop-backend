@@ -79,7 +79,7 @@ export class AuthService {
     }
   }
 
-  private async issueTokens(userId: number) {
+  async issueTokens(userId: number) {
     const data = {id: userId}
 
     const accessToken = this.jwt.sign(data, {
