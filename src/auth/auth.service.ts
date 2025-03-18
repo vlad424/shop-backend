@@ -66,19 +66,6 @@ export class AuthService {
     }
   }
 
-  async googleLogin(req) {
-    console.log('pizda')
-    if (!req.user) {
-      return 'No user from google'
-    }
-
-    console.log('ingo')
-    return {
-      message: 'User information from google',
-      user: req.user
-    }
-  }
-
   async issueTokens(userId: number) {
     const data = {id: userId}
 

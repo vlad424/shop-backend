@@ -42,11 +42,9 @@ export class AuthController {
   async googleLogin() {}
 
   @UseGuards(GoogleAuthGuard)
-  @Get('google/redirect')
+  @Get('google/callback')
   async googleRedirect(@Req() req, @Res() res) {
     const response = await this.authService.issueTokens(req.user.id)
-
-    console.log(response)
 
     res.redirect(`http://localhost:5173?token=${response.accessToken}`)
   }

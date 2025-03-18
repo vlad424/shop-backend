@@ -26,6 +26,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       where: {email: profile.emails[0].value}
     })
     
+    console.log(accessToken, refreshToken)
+
     if(!isExists) return isExists
 
     const google_user = await this.prisma.user.create({
@@ -37,13 +39,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       }
     }) 
 
-    //const tokens = await this.authService.issueTokens(google_user.id) 
+    console.log(accessToken, refreshToken)
 
     done(null, google_user)
-
-    // return {
-    //   user: google_user,
-    //   tokens
-    // }
   }
 }
