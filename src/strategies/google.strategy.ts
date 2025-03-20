@@ -25,10 +25,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const isExists = await this.prisma.user.findUnique({
       where: {email: profile.emails[0].value}
     })
-    
-    console.log(accessToken, refreshToken)
 
-    if(!isExists) return isExists
+    if(isExists) return isExists
 
     const google_user = await this.prisma.user.create({
       data: {
@@ -37,9 +35,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         password: '',
         username: profile.name.givenName
       }
-    }) 
-
-    console.log(accessToken, refreshToken)
+    })
 
     done(null, google_user)
   }
