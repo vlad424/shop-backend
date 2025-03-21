@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { SignInDto, SignUpDto } from './auth.dto';
 import { hash, verify } from 'argon2';
@@ -24,7 +24,7 @@ export class AuthService {
       }
     })
 
-    if(user) throw new BadRequestException('Пользователь уже существует')
+    if(user) throw new ConflictException('Пользователь уже существует')
     if(another_user?.username === dto.username) throw new BadRequestException('Такой username уже существует')
 
     const new_user = await this.prisma.user.create({
@@ -59,6 +59,21 @@ export class AuthService {
     if(!isValid) throw new UnauthorizedException('Неправильный пароль')
 
     const tokens = await this.issueTokens(user.id)
+
+    return {
+      user: this.returnUserFields(user),
+      ...tokens
+    }
+  }
+
+  async googleAuth(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {id: userId}
+    })
+
+    if(!user) return
+
+    const tokens = this.issueTokens(userId)
 
     return {
       user: this.returnUserFields(user),
