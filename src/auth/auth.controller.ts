@@ -48,4 +48,9 @@ export class AuthController {
 
     res.redirect(`http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}`)
   }
+  
+  @Get('profile/:id') 
+  async getProfile(@Param() data: {id: number}) {
+    return this.authService.getUserById(data.id)
+  }
 }

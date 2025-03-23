@@ -81,6 +81,22 @@ export class AuthService {
     }
   }
 
+  async getUserById(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {id: +userId},
+      include: {
+        profile: true
+      },
+      omit: {
+        password: true
+      }
+    })
+
+    if(!user) throw new NotFoundException('Такого юзера не существует')
+
+    return user
+  }
+
   async issueTokens(userId: number) {
     const data = {id: userId}
 
