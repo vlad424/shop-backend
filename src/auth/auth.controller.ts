@@ -46,7 +46,7 @@ export class AuthController {
   async googleRedirect(@Req() req, @Res() res) {
     const response = await this.authService.issueTokens(req.user.id)
 
-    res.redirect(`http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}`)
+    res.redirect(`http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`)
   }
   
   @Get('profile/:id') 
