@@ -94,7 +94,9 @@ export class AuthService {
 
     if(!user) throw new NotFoundException('Такого юзера не существует')
 
-    return user
+    return {
+      user: user
+    }
   }
 
   async issueTokens(userId: number) {
