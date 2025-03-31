@@ -11,7 +11,6 @@ export class ProductsService {
         category_products: true
       }
     })
-    console.log(categories)
 
     return categories
   }
