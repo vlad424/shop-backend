@@ -33,7 +33,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         email: profile.emails[0].value,
         name: profile.name.givenName,
         password: '',
-        username: profile.name.givenName
+        username: profile.name.givenName,
+        profile: {
+          create: {
+            profile_additional_info: ''
+          }
+        }
       }
     })
 

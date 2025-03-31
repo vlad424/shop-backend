@@ -1,31 +1,41 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { SignInDto, SignUpDto } from './auth.dto';
+import { SignInDto, SignUpDto, SwitchToDillerDto } from './auth.dto';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+  ) {}
 
-  async SignUp(dto : SignUpDto) {
+  async SignUp(dto: SignUpDto) {
     const user = await this.prisma.user.findUnique({
       where: {
-        email: dto.email
-      }
-    })
+        email: dto.email,
+      },
+    });
     const another_user = await this.prisma.user.findUnique({
       where: {
-        username: dto.username
+        username: dto.username,
       },
       select: {
-        username: true
-      }
-    })
+        username: true,
+      },
+    });
 
-    if(user) throw new ConflictException('Пользователь уже существует')
-    if(another_user?.username === dto.username) throw new BadRequestException('Такой username уже существует')
+    if (user) throw new ConflictException('Пользователь уже существует');
+    if (another_user?.username === dto.username)
+      throw new BadRequestException('Такой username уже существует');
 
     const new_user = await this.prisma.user.create({
       data: {
@@ -33,83 +43,110 @@ export class AuthService {
         name: dto.name,
         username: dto.username,
         password: await hash(dto.password),
-        roleId: 1
-      }
-    })
+        roleId: 1,
+        profile: {
+          create: {
+            profile_additional_info: '',
+          },
+        },
+      },
+    });
 
-    const tokens = await this.issueTokens(new_user.id)
+    console.log(new_user)
+
+    const tokens = await this.issueTokens(new_user.id);
 
     return {
       user: this.returnUserFields(new_user),
-      ...tokens
-    }
+      ...tokens,
+    };
   }
 
   async SignIn(dto: SignInDto) {
     const user = await this.prisma.user.findUnique({
       where: {
-        username: dto.username
-      }
-    })
+        username: dto.username,
+      },
+    });
 
-    if(!user) throw new NotFoundException('Такого пользователя не существует')
-    
-    const isValid = await verify(user.password, dto.password)
+    if (!user) throw new NotFoundException('Такого пользователя не существует');
 
-    if(!isValid) throw new UnauthorizedException('Неправильный пароль')
+    const isValid = await verify(user.password, dto.password);
 
-    const tokens = await this.issueTokens(user.id)
+    if (!isValid) throw new UnauthorizedException('Неправильный пароль');
+
+    const tokens = await this.issueTokens(user.id);
 
     return {
       user: this.returnUserFields(user),
-      ...tokens
-    }
+      ...tokens,
+    };
   }
 
   async googleAuth(userId: number) {
     const user = await this.prisma.user.findUnique({
-      where: {id: userId}
-    })
+      where: { id: userId },
+    });
 
-    if(!user) return
+    if (!user) return;
 
-    const tokens = this.issueTokens(userId)
+    const tokens = this.issueTokens(userId);
 
     return {
       user: this.returnUserFields(user),
-      ...tokens
-    }
+      ...tokens,
+    };
   }
 
   async getUserById(userId: number) {
     const user = await this.prisma.user.findUnique({
-      where: {id: +userId},
+      where: { id: +userId },
       include: {
-        profile: true
+        profile: true,
+      },
+      omit: {
+        password: true,
+      },
+    });
+
+    if (!user) throw new NotFoundException('Такого юзера не существует');
+
+    return {
+      user: user,
+    };
+  }
+
+  async switchToDiller(data : SwitchToDillerDto) {
+    const user = await this.prisma.user.update({
+      where: {id: +data.id},
+      data: {
+        roleId: 2
       },
       omit: {
         password: true
       }
     })
-
-    if(!user) throw new NotFoundException('Такого юзера не существует')
-
-    return {
-      user: user
-    }
+    
+    const profile = await this.prisma.profile.update({
+      where: {userId: +data.id},
+      data: {
+        address: data.address,
+        TIN: data.TIN
+      }
+    })
   }
 
   async issueTokens(userId: number) {
-    const data = {id: userId}
+    const data = { id: userId };
 
     const accessToken = this.jwt.sign(data, {
       expiresIn: '1h',
-    })
+    });
     const refreshToken = this.jwt.sign(data, {
       expiresIn: '29d',
-    })
+    });
 
-    return {accessToken, refreshToken}
+    return { accessToken, refreshToken };
   }
   private returnUserFields(user: User) {
     return {
@@ -117,6 +154,6 @@ export class AuthService {
       email: user.email,
       name: user.name,
       username: user.username,
-    }
+    };
   }
 }

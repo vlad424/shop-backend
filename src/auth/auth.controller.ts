@@ -1,5 +1,5 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Req, Res, Sse, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { SignInDto, SignUpDto } from './auth.dto';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Req, Res, Sse, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { SignInDto, SignUpDto, SwitchToDillerDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { TokenGuard } from 'src/guards/token.duard';
 import { GoogleAuthGuard } from 'src/guards/google.guard';
@@ -17,7 +17,7 @@ export class AuthController {
 
   //@UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
-  @HttpCode(200)
+  @HttpCode(201)
   @Post('signUp')
   async SignUp(@Body() dto: SignUpDto) {
     return this.authService.SignUp(dto)
@@ -48,10 +48,20 @@ export class AuthController {
 
     res.redirect(`http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`)
   }
-  
+
   @UseGuards(TokenGuard)
+  @HttpCode(200)
   @Get('profile/') 
   async getProfile(@Req() req) {
     return this.authService.getUserById(req.user.id)
+  }
+
+  @UseGuards(TokenGuard)
+  @HttpCode(201)
+  @Patch('profile/')
+  async switchToDiller(@Req() req, @Body() data) {
+    const dto: SwitchToDillerDto = {id: req.user.id, address: data.address, TIN: data.TIN}
+
+    return this.authService.switchToDiller(dto)
   }
 }

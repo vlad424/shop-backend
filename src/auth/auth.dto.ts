@@ -34,3 +34,14 @@ export class SignUpDto {
   })
   password: string
 }
+
+export class SwitchToDillerDto {
+  @IsNotEmpty({message: "Заполните поле ИНН"})
+  @MinLength(20, {message: "Не менее 20 символов"})
+  TIN: string
+
+  @IsNotEmpty({message: "Адрес не может быть пустым"})
+  address: string
+
+  id: number
+}
