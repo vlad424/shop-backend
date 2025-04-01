@@ -10,6 +10,7 @@ import { SignInDto, SignUpDto, SwitchToDillerDto } from './auth.dto';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
+import { RolesTypes } from 'src/common_types/role.type';
 
 @Injectable()
 export class AuthService {
@@ -163,6 +164,7 @@ export class AuthService {
       email: user.email,
       name: user.name,
       username: user.username,
+      role: RolesTypes[user.roleId]
     };
   }
 }
