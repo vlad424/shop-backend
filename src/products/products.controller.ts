@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { TokenGuard } from 'src/guards/token.duard';
 
@@ -9,8 +9,15 @@ export class ProductsController {
 
   @UseGuards(TokenGuard)
   @HttpCode(200)
-  @Get('')
+  @Get('  ')
   async getCategories() {
     return this.productsService.getCategories()
+  }
+
+  @UseGuards(TokenGuard)
+  @HttpCode(201)
+  @Post('create')
+  async publishProduct() {
+    
   }
 }

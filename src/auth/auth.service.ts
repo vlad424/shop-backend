@@ -102,7 +102,9 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { id: +userId },
       include: {
-        profile: true,
+        profile: {
+          omit: {userId: true}
+        }
       },
       omit: {
         password: true,
@@ -116,7 +118,7 @@ export class AuthService {
     };
   }
 
-  async switchToDiller(data : SwitchToDillerDto) {
+  async switchToDiller(data: SwitchToDillerDto & {id: number}) {
     const user = await this.prisma.user.update({
       where: {id: +data.id},
       data: {
@@ -126,14 +128,21 @@ export class AuthService {
         password: true
       }
     })
-    
+
     const profile = await this.prisma.profile.update({
       where: {userId: +data.id},
       data: {
         address: data.address,
-        TIN: data.TIN
-      }
+        TIN: data.TIN,
+        profile_additional_info: data.profile_additional_info
+      },
+      omit: { userId: true }
     })
+
+    return {
+      user: user,
+      profile: profile
+    }
   }
 
   async issueTokens(userId: number) {

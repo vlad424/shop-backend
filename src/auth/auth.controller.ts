@@ -51,16 +51,22 @@ export class AuthController {
 
   @UseGuards(TokenGuard)
   @HttpCode(200)
-  @Get('profile/') 
+  @Get('profile') 
   async getProfile(@Req() req) {
     return this.authService.getUserById(req.user.id)
   }
 
+  @UsePipes(new ValidationPipe())
   @UseGuards(TokenGuard)
   @HttpCode(201)
-  @Patch('profile/')
-  async switchToDiller(@Req() req, @Body() data) {
-    const dto: SwitchToDillerDto = {id: req.user.id, address: data.address, TIN: data.TIN}
+  @Patch('profile')
+  async switchToDiller(@Req() req, @Body() data: SwitchToDillerDto) {
+    const dto = {
+      id: req.user.id, 
+      address: data.address, 
+      TIN: data.TIN, 
+      profile_additional_info: data.profile_additional_info
+    }
 
     return this.authService.switchToDiller(dto)
   }

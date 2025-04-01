@@ -4,9 +4,6 @@ export class SignInDto {
   @MinLength(4, {message: "username должен быть больше 4 символов"})
   username: string
 
-  @IsNotEmpty({message: "Имя не может быть пустым"})
-  name: string
-
   // @IsEmail({}, {message: 'Почта должна быть действительной'})
   // @Optional()
   // email: string
@@ -37,11 +34,16 @@ export class SignUpDto {
 
 export class SwitchToDillerDto {
   @IsNotEmpty({message: "Заполните поле ИНН"})
-  @MinLength(20, {message: "Не менее 20 символов"})
+  @MinLength(9, {message: "Неверный ИНН"})
   TIN: string
+
+  @MinLength(20, {message: "Описание не менее 20 символов"})
+  profile_additional_info: string
 
   @IsNotEmpty({message: "Адрес не может быть пустым"})
   address: string
+}
 
+export class userId {
   id: number
 }

@@ -14,4 +14,8 @@ export class ProductsService {
 
     return categories
   }
+
+  async publishProduct() {
+    return 0
+  }
 }
