@@ -101,6 +101,7 @@ model Reviews {
   reivew_id Int @unique @default(autoincrement())
 
   reivew_content String
+  reivew_quality String
 
   review_profile   Profile @relation(fields: [review_profileId], references: [profile_id])
   review_profileId Int
