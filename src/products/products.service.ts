@@ -80,7 +80,7 @@ export class ProductsService {
         product_price: dto.product_price,
         product_value: dto.product_value,
         product_categoryId: category.category_id,
-        diller_profileId: diller!.roleId,
+        diller_profileId: diller!.profile!.profile_id,
       },
     });
 

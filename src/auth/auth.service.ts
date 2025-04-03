@@ -53,8 +53,6 @@ export class AuthService {
       },
     });
 
-    console.log(new_user)
-
     const tokens = await this.issueTokens(new_user.id);
 
     return {
@@ -104,6 +102,9 @@ export class AuthService {
       where: { id: +userId },
       include: {
         profile: {
+          include: {
+            Product: true
+          },
           omit: {userId: true}
         }
       },
@@ -124,9 +125,6 @@ export class AuthService {
       where: {id: +data.id},
       data: {
         roleId: 2
-      },
-      omit: {
-        password: true
       }
     })
 
@@ -135,13 +133,14 @@ export class AuthService {
       data: {
         address: data.address,
         TIN: data.TIN,
-        profile_additional_info: data.profile_additional_info
+        profile_additional_info: data.profile_additional_info,
+        profie_diller_name: data.profie_diller_name
       },
       omit: { userId: true }
     })
 
     return {
-      user: user,
+      user: this.returnUserFields(user),
       profile: profile
     }
   }

@@ -42,6 +42,9 @@ export class SwitchToDillerDto {
 
   @IsNotEmpty({message: "Адрес не может быть пустым"})
   address: string
+
+  @MinLength(4, {message: 'Название не менее 4 символов'})
+  profie_diller_name: string
 }
 
 export class userId {

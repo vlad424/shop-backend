@@ -26,6 +26,7 @@ model User {
 model Profile {
   profile_id Int @unique @default(autoincrement())
 
+  profie_diller_name String?
   profile_additional_info String?
 
   TIN String? 
