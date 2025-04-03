@@ -26,7 +26,9 @@ export class ProductsService {
   async getProducts(searchText: string | undefined) {
     const products = await this.prisma.product.findMany({
       where: {
-        product_title: searchText,
+        product_title: {
+          search: searchText
+        },
       },
       include: {
         product_diller: true,
