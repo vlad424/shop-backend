@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
+  Query,
   Req,
   UseGuards,
   UsePipes,
@@ -19,9 +21,16 @@ export class ProductsController {
 
   @UseGuards(TokenGuard)
   @HttpCode(200)
-  @Get('')
+  @Get('categories')
   async getCategories() {
     return this.productsService.getCategories();
+  }
+
+  @UseGuards(TokenGuard)
+  @HttpCode(200)
+  @Get('')
+  async getProducts(@Query() query: {searchText: string}) {
+    return this.productsService.getProducts(query.searchText === '' ? undefined : query.searchText)
   }
 
   @UsePipes(new ValidationPipe())

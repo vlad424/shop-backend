@@ -23,6 +23,27 @@ export class ProductsService {
     return categories;
   }
 
+  async getProducts(searchText: string | undefined) {
+    const products = await this.prisma.product.findMany({
+      where: {
+        product_title: searchText,
+      },
+      include: {
+        product_diller: true,
+        Category: true,
+        product_reviews: true,
+      },
+      omit: {
+        diller_profileId: true,
+        product_categoryId: true
+      }
+    })
+
+    if(!products) throw new NotFoundException('Товаров не найдено')
+  
+    return products
+  }
+
   async publishProduct(dto: PublishProductDto & { dillerId: number }) {
     const category = await this.prisma.category.findFirst({
       where: {
