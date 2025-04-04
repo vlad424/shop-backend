@@ -8,6 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id        Int    @unique @default(autoincrement())
+  role_name String
+  user      User[]
+}
+
 model User {
   id Int @unique @default(autoincrement())
 
@@ -39,12 +45,7 @@ model Profile {
   Product Product[]
   History History[]
   Liked   Liked[]
-}
-
-model Role {
-  id        Int    @unique @default(autoincrement())
-  role_name String
-  user      User[]
+  Orders Order[]
 }
 
 model Category {
@@ -53,6 +54,71 @@ model Category {
   category_title String
 
   category_products Product[]
+}
+
+model Product {
+  product_id Int @unique @default(autoincrement())
+
+  product_title   String
+  product_content String
+  product_price   Int
+  product_value   Int
+
+  product_diller     Profile   @relation(fields: [diller_profileId], references: [profile_id])
+  diller_profileId   Int
+  Category           Category? @relation(fields: [product_categoryId], references: [category_id])
+  product_categoryId Int?      @map("categoryId")
+  product_reviews    Reviews[]
+
+  History History[]
+  Liked   Liked[]
+
+  @@index([product_title, product_price])
+
+  OrderItem OrderItem[]
+}
+
+model Order {
+  id Int @unique @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  status EnumOrderStatus @default(PENDING)
+
+  items OrderItem[]
+
+  profile Profile @relation(fields: [profileId], references: [profile_id])
+  profileId Int
+}
+
+model OrderItem {
+  id Int @unique @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  quantity Int
+  price Int
+
+  order Order @relation(fields: [orderId], references: [id])
+  orderId Int
+
+  product Product @relation(fields: [productId], references: [product_id])
+  productId Int
+}
+
+model Reviews {
+  reivew_id Int @unique @default(autoincrement())
+
+  reivew_content String
+  reivew_quality String
+
+  review_profile   Profile @relation(fields: [review_profileId], references: [profile_id])
+  review_profileId Int
+
+  createdAt        DateTime @default(now())
+  //review_media Нужно будет подключить AWS
+  Product          Product? @relation(fields: [review_productId], references: [product_id])
+  review_productId Int?     @map("productId")
 }
 
 model Liked {
@@ -79,37 +145,9 @@ model History {
   profileId Int
 }
 
-model Product {
-  product_id Int @unique @default(autoincrement())
-
-  product_title   String
-  product_content String
-  product_price   Int
-  product_value   Int
-
-  product_diller     Profile   @relation(fields: [diller_profileId], references: [profile_id])
-  diller_profileId   Int
-  Category           Category? @relation(fields: [product_categoryId], references: [category_id])
-  product_categoryId Int?      @map("categoryId")
-  product_reviews    Reviews[]
-
-  History History[]
-  Liked   Liked[]
-
-  @@index([product_title, product_price])
-}
-
-model Reviews {
-  reivew_id Int @unique @default(autoincrement())
-
-  reivew_content String
-  reivew_quality String
-
-  review_profile   Profile @relation(fields: [review_profileId], references: [profile_id])
-  review_profileId Int
-
-  createdAt        DateTime @default(now())
-  //review_media Нужно будет подключить AWS
-  Product          Product? @relation(fields: [review_productId], references: [product_id])
-  review_productId Int?     @map("productId")
+enum EnumOrderStatus {
+  PENDING
+  PAYED
+  SHIPPED
+  DELIVERED
 }
