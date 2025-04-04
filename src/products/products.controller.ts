@@ -7,13 +7,16 @@ import {
   Post,
   Query,
   Req,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { TokenGuard } from 'src/guards/token.duard';
 import { PublishProductDto } from './product.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
@@ -33,6 +36,11 @@ export class ProductsController {
     return this.productsService.getProducts(query.searchText === '' ? undefined : query.searchText)
   }
 
+  @Get(':id')
+  async getProduct(@Param() param: {id: string}) {
+    return this.productsService.getProduct(param.id)
+  }
+
   @UsePipes(new ValidationPipe())
   @UseGuards(TokenGuard)
   @HttpCode(201)
@@ -41,5 +49,11 @@ export class ProductsController {
     const data = {...dto, dillerId: req.user.id} 
 
     return this.productsService.publishProduct(data)
+  }
+
+  @Post('eh')
+  @UseInterceptors(FilesInterceptor('files'))
+  async uploadimg(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return files
   }
 }

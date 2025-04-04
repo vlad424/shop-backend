@@ -23,6 +23,16 @@ export class ProductsService {
     return categories;
   }
 
+  async getProduct(productId) {
+    const product = await this.prisma.product.findUnique({
+      where: {product_id: +productId}
+    })
+
+    if(!product) throw new NotFoundException('Такого товара нет')
+
+    return product
+  }
+
   async getProducts(searchText: string | undefined) {
     const products = await this.prisma.product.findMany({
       where: {
