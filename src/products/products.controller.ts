@@ -54,6 +54,8 @@ export class ProductsController {
   @Post('eh')
   @UseInterceptors(FilesInterceptor('files'))
   async uploadimg(@UploadedFiles() files: Array<Express.Multer.File>) {
-    return files
+    
+
+    return files[0]
   }
 }
