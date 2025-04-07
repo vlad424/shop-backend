@@ -64,6 +64,8 @@ model Product {
   product_price   Int
   product_value   Int
 
+  product_image   String[]
+
   product_diller     Profile   @relation(fields: [diller_profileId], references: [profile_id])
   diller_profileId   Int
   Category           Category? @relation(fields: [product_categoryId], references: [category_id])

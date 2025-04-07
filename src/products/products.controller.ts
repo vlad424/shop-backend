@@ -7,6 +7,7 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -54,8 +55,15 @@ export class ProductsController {
   @Post('eh')
   @UseInterceptors(FilesInterceptor('files'))
   async uploadimg(@UploadedFiles() files: Array<Express.Multer.File>) {
-    
+    return this.productsService.handleFileUpload(files)
+  }
 
-    return files[0]
+  @Get('getImages')
+  async getFile(@Param('imagename') image, @Res() res) {
+    const response = res.sendFile(image, {root: './public/files'})
+
+    return {
+      data: response
+    }
   }
 }

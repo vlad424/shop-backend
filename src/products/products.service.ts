@@ -96,4 +96,9 @@ export class ProductsService {
 
     return product;
   }
+  async handleFileUpload(files: Array<Express.Multer.File>) {
+    return {
+      message: `Файл загружен успешно ${files[0].path}`
+    }
+  }
 }
