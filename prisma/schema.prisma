@@ -65,6 +65,7 @@ model Product {
   product_value   Int
 
   product_image   String[]
+  product_specification Json
 
   product_diller     Profile   @relation(fields: [diller_profileId], references: [profile_id])
   diller_profileId   Int

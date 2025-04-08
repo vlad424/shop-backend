@@ -23,7 +23,7 @@ export class ProductsService {
     return categories;
   }
 
-  async getProduct(productId, res) {
+  async getProduct(productId) {
     const product = await this.prisma.product.findUnique({
       where: { product_id: +productId },
     });
@@ -91,8 +91,6 @@ export class ProductsService {
     for (let i = 0; i < files.length; i++) {
       filesPath.unshift(`${files[0].filename}`)
     }
-
-    console.log(filesPath) 
 
     const product = await this.prisma.product.create({
       data: {

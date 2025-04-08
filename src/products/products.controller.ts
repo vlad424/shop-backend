@@ -34,19 +34,15 @@ export class ProductsController {
   @UseGuards(TokenGuard)
   @HttpCode(200)
   @Get('')
-  async getProducts(@Query() query: {searchText: string}) {
-    return this.productsService.getProducts(query.searchText === '' ? undefined : query.searchText)
+  async getProducts(@Query() query: { searchText: string }) {
+    return this.productsService.getProducts(
+      query.searchText === '' ? undefined : query.searchText,
+    );
   }
 
   @Get(':id')
-  async getProduct(@Param() param: {id: string}, @Res() res) {
-    const data_service = await this.productsService.getProduct(param.id, res)
-
-    const response = res.sendFile(data_service.product_image[0], {root: './public/files'})
-
-    return {
-      image: response
-    }
+  async getProduct(@Param() param: { id: string }) {
+    return await this.productsService.getProduct(param.id);
   }
 
   @UsePipes(new ValidationPipe())
@@ -54,25 +50,20 @@ export class ProductsController {
   @HttpCode(201)
   @Post('publish_product')
   @UseInterceptors(FilesInterceptor('files'))
-  async uploadimg(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: PublishProductDto, @Req() req) {
+  async uploadimg(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body: PublishProductDto,
+    @Req() req,
+  ) {
     const data: PublishProductDto & { dillerId: number } = {
       product_title: body.product_title,
       product_content: body.product_content,
       product_price: body.product_price,
       product_value: body.product_value,
       categoryName: body.categoryName,
-      dillerId: req.user.id
-    }
-    
-    return this.productsService.publishProduct(data, files)
-  }
+      dillerId: req.user.id,
+    };
 
-  @Get('getImages')
-  async getFile(@Param('imagename') image, @Res() res) {
-    const response = res.sendFile(image, {root: './public/files'})
-
-    return {
-      data: response 
-    }
+    return this.productsService.publishProduct(data, files);
   }
 }
