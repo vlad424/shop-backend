@@ -42,20 +42,32 @@ export class ProductsController {
     return this.productsService.getProduct(param.id)
   }
 
+  // @UsePipes(new ValidationPipe())
+  // @UseGuards(TokenGuard)
+  // @HttpCode(201)
+  // @Post('publish')
+  // async publishProduct(@Req() req, @Body() dto: PublishProductDto) {
+  //   const data = {...dto, dillerId: req.user.id} 
+
+  //   return this.productsService.publishProduct(data)
+  // }
+
   @UsePipes(new ValidationPipe())
   @UseGuards(TokenGuard)
   @HttpCode(201)
-  @Post('publish')
-  async publishProduct(@Req() req, @Body() dto: PublishProductDto) {
-    const data = {...dto, dillerId: req.user.id} 
-
-    return this.productsService.publishProduct(data)
-  }
-
-  @Post('eh')
+  @Post('publish_product')
   @UseInterceptors(FilesInterceptor('files'))
-  async uploadimg(@UploadedFiles() files: Array<Express.Multer.File>) {
-    return this.productsService.handleFileUpload(files)
+  async uploadimg(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: PublishProductDto, @Req() req) {
+    const data: PublishProductDto & { dillerId: number } = {
+      product_title: body.product_title,
+      product_content: body.product_content,
+      product_price: body.product_price,
+      product_value: body.product_value,
+      categoryName: body.categoryName,
+      dillerId: req.user.id
+    }
+    
+    return this.productsService.publishProduct(data, files)
   }
 
   @Get('getImages')
@@ -63,7 +75,7 @@ export class ProductsController {
     const response = res.sendFile(image, {root: './public/files'})
 
     return {
-      data: response
+      data: response 
     }
   }
 }

@@ -25,19 +25,19 @@ export class ProductsService {
 
   async getProduct(productId) {
     const product = await this.prisma.product.findUnique({
-      where: {product_id: +productId}
-    })
+      where: { product_id: +productId },
+    });
 
-    if(!product) throw new NotFoundException('Такого товара нет')
+    if (!product) throw new NotFoundException('Такого товара нет');
 
-    return product
+    return product;
   }
 
   async getProducts(searchText: string | undefined) {
     const products = await this.prisma.product.findMany({
       where: {
         product_title: {
-          search: searchText
+          search: searchText,
         },
       },
       include: {
@@ -47,16 +47,19 @@ export class ProductsService {
       },
       omit: {
         diller_profileId: true,
-        product_categoryId: true
-      }
-    })
+        product_categoryId: true,
+      },
+    });
 
-    if(!products) throw new NotFoundException('Товаров не найдено')
-  
-    return products
+    if (!products) throw new NotFoundException('Товаров не найдено');
+
+    return products;
   }
 
-  async publishProduct(dto: PublishProductDto & { dillerId: number }) {
+  async publishProduct(
+    dto: PublishProductDto & { dillerId: number },
+    files: Array<Express.Multer.File>,
+  ) {
     const category = await this.prisma.category.findFirst({
       where: {
         category_title: dto.categoryName,
@@ -83,14 +86,21 @@ export class ProductsService {
     if (diller && RolesTypes[diller.roleId] !== 'diller')
       throw new ForbiddenException('Нет прав');
 
+    let filesPath: Array<Express.Multer.File['path']> = []
+
+    for (let i = 0; i < files.length; i++) {
+      filesPath.unshift(`${files[0].path}`)
+    }
+
     const product = await this.prisma.product.create({
       data: {
         product_content: dto.product_content,
         product_title: dto.product_title,
-        product_price: dto.product_price,
-        product_value: dto.product_value,
+        product_price: +dto.product_price,
+        product_value: +dto.product_value,
         product_categoryId: category.category_id,
         diller_profileId: diller!.profile!.profile_id,
+        product_image:filesPath
       },
     });
 
@@ -98,7 +108,7 @@ export class ProductsService {
   }
   async handleFileUpload(files: Array<Express.Multer.File>) {
     return {
-      message: `Файл загружен успешно ${files[0].path}`
-    }
+      message: `Файл загружен успешно ${files[0].path}`,
+    };
   }
 }
