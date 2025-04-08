@@ -23,7 +23,7 @@ export class ProductsService {
     return categories;
   }
 
-  async getProduct(productId) {
+  async getProduct(productId, res) {
     const product = await this.prisma.product.findUnique({
       where: { product_id: +productId },
     });
@@ -89,8 +89,10 @@ export class ProductsService {
     let filesPath: Array<Express.Multer.File['path']> = []
 
     for (let i = 0; i < files.length; i++) {
-      filesPath.unshift(`${files[0].path}`)
+      filesPath.unshift(`${files[0].filename}`)
     }
+
+    console.log(filesPath) 
 
     const product = await this.prisma.product.create({
       data: {

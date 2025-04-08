@@ -18,6 +18,7 @@ import { ProductsService } from './products.service';
 import { TokenGuard } from 'src/guards/token.duard';
 import { PublishProductDto } from './product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
 
 @Controller('products')
 export class ProductsController {
@@ -38,19 +39,15 @@ export class ProductsController {
   }
 
   @Get(':id')
-  async getProduct(@Param() param: {id: string}) {
-    return this.productsService.getProduct(param.id)
+  async getProduct(@Param() param: {id: string}, @Res() res) {
+    const data_service = await this.productsService.getProduct(param.id, res)
+
+    const response = res.sendFile(data_service.product_image[0], {root: './public/files'})
+
+    return {
+      image: response
+    }
   }
-
-  // @UsePipes(new ValidationPipe())
-  // @UseGuards(TokenGuard)
-  // @HttpCode(201)
-  // @Post('publish')
-  // async publishProduct(@Req() req, @Body() dto: PublishProductDto) {
-  //   const data = {...dto, dillerId: req.user.id} 
-
-  //   return this.productsService.publishProduct(data)
-  // }
 
   @UsePipes(new ValidationPipe())
   @UseGuards(TokenGuard)
