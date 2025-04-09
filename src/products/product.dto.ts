@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { IsNotEmpty, MinLength } from "class-validator";
 
 export class PublishProductDto {
@@ -15,4 +16,7 @@ export class PublishProductDto {
 
   @IsNotEmpty({message: 'Укажите название категории'})
   categoryName: string
+
+  @IsNotEmpty({})
+  product_specification: Prisma.JsonArray
 }

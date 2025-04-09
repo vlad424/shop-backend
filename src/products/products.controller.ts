@@ -60,6 +60,7 @@ export class ProductsController {
       product_content: body.product_content,
       product_price: body.product_price,
       product_value: body.product_value,
+      product_specification: body.product_specification,
       categoryName: body.categoryName,
       dillerId: req.user.id,
     };

@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { SignInDto, SignUpDto, SwitchToDillerDto } from './auth.dto';
+import { SignInDto, SignUpDto, SwitchToDillerDto, userId } from './auth.dto';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
@@ -51,12 +51,26 @@ export class AuthService {
           },
         },
       },
+      include: {
+        profile: {
+          omit: {
+            userId: true,
+            profile_id: true
+          }
+        }
+      },
+      omit: {
+        password: true
+      }
     });
 
     const tokens = await this.issueTokens(new_user.id);
 
     return {
-      user: this.returnUserFields(new_user),
+      user: {
+        ...new_user,
+        roleId: RolesTypes[new_user.roleId]
+      },
       ...tokens,
     };
   }
@@ -66,6 +80,14 @@ export class AuthService {
       where: {
         username: dto.username,
       },
+      include: {
+        profile: {
+          omit: {
+            userId: true,
+            profile_id: true
+          }
+        }
+      }
     });
 
     if (!user) throw new NotFoundException('Такого пользователя не существует');
@@ -77,7 +99,10 @@ export class AuthService {
     const tokens = await this.issueTokens(user.id);
 
     return {
-      user: this.returnUserFields(user),
+      user: {
+        ...user,
+        roleId: RolesTypes[user.roleId]
+      },
       ...tokens,
     };
   }
@@ -92,7 +117,10 @@ export class AuthService {
     const tokens = this.issueTokens(userId);
 
     return {
-      user: this.returnUserFields(user),
+      user: {
+        ...user,
+        roleId: RolesTypes[user.roleId]
+      },
       ...tokens,
     };
   }
@@ -105,7 +133,7 @@ export class AuthService {
           include: {
             Product: true
           },
-          omit: {userId: true}
+          omit: {userId: true, profile_id: true}
         }
       },
       omit: {
@@ -116,7 +144,10 @@ export class AuthService {
     if (!user) throw new NotFoundException('Такого юзера не существует');
 
     return {
-      user: user,
+      user: {
+        ...user,
+        roleId: RolesTypes[user.roleId]
+      },
     };
   }
 
@@ -163,7 +194,7 @@ export class AuthService {
       email: user.email,
       name: user.name,
       username: user.username,
-      role: RolesTypes[user.roleId]
+      role: RolesTypes[user.roleId],
     };
   }
 }

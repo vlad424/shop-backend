@@ -26,6 +26,22 @@ export class ProductsService {
   async getProduct(productId) {
     const product = await this.prisma.product.findUnique({
       where: { product_id: +productId },
+      include: {
+        Category: {
+          omit: {
+            category_id: true
+          }
+        },
+        product_diller: {
+          select: {
+            profie_diller_name: true
+          }
+        }
+      },
+      omit: {
+        product_categoryId: true,
+        diller_profileId: true
+      }
     });
 
     if (!product) throw new NotFoundException('Такого товара нет');
@@ -89,7 +105,7 @@ export class ProductsService {
     let filesPath: Array<Express.Multer.File['path']> = []
 
     for (let i = 0; i < files.length; i++) {
-      filesPath.unshift(`${files[0].filename}`)
+      filesPath.push(`${files[i].filename}`)
     }
 
     const product = await this.prisma.product.create({
@@ -98,7 +114,9 @@ export class ProductsService {
         product_title: dto.product_title,
         product_price: +dto.product_price,
         product_value: +dto.product_value,
+        product_specification: dto.product_specification,
         product_categoryId: category.category_id,
+
         diller_profileId: diller!.profile!.profile_id,
         product_image:filesPath
       },
