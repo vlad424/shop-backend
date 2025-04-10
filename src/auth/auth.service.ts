@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { SignInDto, SignUpDto, SwitchToDillerDto, userId } from './auth.dto';
+import { SignInDto, SignUpDto, SwitchToDillerDto, UpdateProfileDto, userId } from './auth.dto';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
@@ -125,25 +125,22 @@ export class AuthService {
     };
   }
 
-  async getUserById(userId: number) {
+  async getUserById(userId: number, param: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id: +userId },
+      where: { id: +param },
       include: {
         profile: {
-          include: {
-            Product: true
-          },
+          include: {Product: true },
           omit: {userId: true, profile_id: true}
         }
       },
-      omit: {
-        password: true,
-      },
+      omit: { password: true, },
     });
 
     if (!user) throw new NotFoundException('Такого юзера не существует');
 
     return {
+      access: userId === +param ? "fully" : "limited",
       user: {
         ...user,
         roleId: RolesTypes[user.roleId]
@@ -174,6 +171,30 @@ export class AuthService {
       user: this.returnUserFields(user),
       profile: profile
     }
+  }
+
+  async updateProfile(dto: UpdateProfileDto & userId & {avatar: Array<Express.Multer.File>}) {
+    if(dto.avatar.length === 0) throw new BadRequestException('Загрузите аватар')
+
+    const user = await this.prisma.user.findUnique({
+      where: {id: +dto.id},
+      include: {profile: true}
+    })
+
+    if(RolesTypes[user!.roleId] === 'diller' && dto.profile_additional_info.length < 20) 
+      throw new BadRequestException('Описание у продавца не может быть меньше 20 символов')
+  
+    const updated_user = await this.prisma.profile.updateManyAndReturn({
+      where: {
+        profile_id: +user!.profile!.profile_id
+      },
+      data: {
+        profile_additional_info: dto.profile_additional_info,
+        profile_avatar: dto.avatar[0].filename
+      },
+    })
+
+    return updated_user
   }
 
   async issueTokens(userId: number) {

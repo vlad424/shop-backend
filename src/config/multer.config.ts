@@ -24,8 +24,4 @@ export const multerOptions : MulterOptions = {
       cb(null, `${name}-${randomName}${extension}`);
     },
   }),
-  
-  limits: {
-    files: 4
-  }
 };

@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJwtConfig } from 'src/config/jwt.config';
 import { GoogleStrategy } from 'src/strategies/google.strategy';
 import { JwtStrategy } from 'src/strategies/jwt.strategy';
+import { MulterModule } from '@nestjs/platform-express';
+import { multerOptions } from 'src/config/multer.config';
 
 @Module({
   controllers: [AuthController],
@@ -16,8 +18,9 @@ import { JwtStrategy } from 'src/strategies/jwt.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: getJwtConfig
-    })
-  ]
+      useFactory: getJwtConfig,
+    }),
+    MulterModule.register({ ...multerOptions, limits: { files: 1 } }),
+  ],
 })
 export class AuthModule {}

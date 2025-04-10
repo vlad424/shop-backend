@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from "class-validator"
 
 export class SignInDto {
   @MinLength(4, {message: "username должен быть больше 4 символов"})
@@ -49,4 +49,9 @@ export class SwitchToDillerDto {
 
 export class userId {
   id: number
+}
+
+export class UpdateProfileDto {
+  @IsOptional()
+  profile_additional_info: string
 }

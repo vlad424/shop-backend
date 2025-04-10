@@ -20,7 +20,7 @@ import { multerOptions } from 'src/config/multer.config';
       inject: [ConfigService],
       useFactory: getJwtConfig,
     }),
-    MulterModule.register(multerOptions),
+    MulterModule.register({ ...multerOptions, limits: { files: 6 } }),
   ],
 })
 export class ProductsModule {}

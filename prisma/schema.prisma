@@ -35,6 +35,8 @@ model Profile {
   profie_diller_name String?
   profile_additional_info String?
 
+  profile_avatar String?
+
   TIN String? 
   address String?
 
