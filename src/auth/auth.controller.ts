@@ -71,7 +71,7 @@ export class AuthController {
 
     res.redirect(
       //`http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`,
-      `https://typescript-todo.ru/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`
+      `https://shop-frontend-henna.vercel.app/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`
     );
   }
 
