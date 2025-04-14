@@ -70,7 +70,8 @@ export class AuthController {
     const response = await this.authService.issueTokens(req.user.id);
 
     res.redirect(
-      `http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`,
+      //`http://localhost:5173/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`,
+      `https://typescript-todo.ru/main?accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&id=${req.user.id}`
     );
   }
 
