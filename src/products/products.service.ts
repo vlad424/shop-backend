@@ -35,7 +35,8 @@ export class ProductsService {
         product_reviews: true,
         product_diller: {
           select: {
-            profie_diller_name: true
+            profie_diller_name: true,
+            profile_id: true
           }
         }
       },
