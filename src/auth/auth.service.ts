@@ -184,17 +184,27 @@ export class AuthService {
     if(RolesTypes[user!.roleId] === 'diller' && dto.profile_additional_info.length < 20) 
       throw new BadRequestException('Описание у продавца не может быть меньше 20 символов')
   
-    const updated_user = await this.prisma.profile.updateManyAndReturn({
-      where: {
-        profile_id: +user!.profile!.profile_id
-      },
-      data: {
-        profile_additional_info: dto.profile_additional_info,
-        profile_avatar: dto.avatar[0].filename
-      },
-    })
-
-    return updated_user
+    if(dto.profile_additional_info !== '') {
+      return await this.prisma.profile.updateManyAndReturn({
+        where: {
+          profile_id: +user!.profile!.profile_id
+        },
+        data: {
+          profile_additional_info: dto.profile_additional_info,
+          profile_avatar: dto.avatar[0].filename
+        },
+      })
+    }
+    else {
+      return await this.prisma.profile.updateManyAndReturn({
+        where: {
+          profile_id: +user!.profile!.profile_id
+        },
+        data: {
+          profile_avatar: dto.avatar[0].filename
+        },
+      })
+    }
   }
 
   async issueTokens(userId: number) {

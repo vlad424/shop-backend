@@ -107,9 +107,10 @@ export class AuthController {
   ) {
     const dto: UpdateProfileDto & userId & {avatar: Array<Express.Multer.File>} = {
       id: req.user.id,
-      profile_additional_info: body.profile_additional_info,
+      profile_additional_info: body?.profile_additional_info || '',
       avatar,
     };
+    
     return this.authService.updateProfile(dto)
   }
 }
