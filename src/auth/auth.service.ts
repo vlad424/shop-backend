@@ -130,7 +130,7 @@ export class AuthService {
       where: { id: +param },
       include: {
         profile: {
-          include: {Product: true, Orders: {include: {items: true}} },
+          include: {Product: true, Orders: {include: {items: {include: {product: true}}}} },
           omit: {userId: true, profile_id: true}
         }
       },
