@@ -6,9 +6,10 @@ import { PrismaService } from './prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, ProductsModule, OrderModule],
+  imports: [ConfigModule.forRoot(), AuthModule, ProductsModule, OrderModule, ReviewModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

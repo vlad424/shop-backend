@@ -121,7 +121,7 @@ model Reviews {
   review_profileId Int
 
   createdAt        DateTime @default(now())
-  //review_media Нужно будет подключить AWS
+  review_media     String[]
   Product          Product? @relation(fields: [review_productId], references: [product_id])
   review_productId Int?     @map("productId")
 }
