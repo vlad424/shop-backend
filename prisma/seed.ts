@@ -6,10 +6,11 @@ const prisma = new PrismaClient();
 const main = async () => {
   console.log('---created-categories---');
   await categories();
-  console.log('------------------------');
 
   console.log('------create-users------');
   await users();
+
+  
   console.log('------------------------');
 };
 
@@ -49,6 +50,7 @@ const users = async () => {
         roleId: 1,
       },
     ],
+    omit: {password: true}
   });
   console.table(roles)
   console.table(users)
