@@ -32,7 +32,19 @@ export class ProductsService {
             category_id: true
           }
         },
-        product_reviews: true,
+        product_reviews: {
+          include: {
+            review_profile: {
+              include: {
+                user: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            }
+          }
+        },
         product_diller: {
           select: {
             profie_diller_name: true,

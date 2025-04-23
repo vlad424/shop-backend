@@ -18,7 +18,7 @@ import { multerOptions } from 'src/config/multer.config';
         inject: [ConfigService],
         useFactory: getJwtConfig,
       }),
-      MulterModule.register({ ...multerOptions, limits: { files: 1 } }),
+      MulterModule.register({ ...multerOptions, limits: { files: 4 } }),
     ],
 })
 export class ReviewModule {}
