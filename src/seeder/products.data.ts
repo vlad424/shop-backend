@@ -56,4 +56,33 @@ export const products_data: Array<ProductData> = [
     product_value: 100,
     product_image: ['t_shirt_1.JPG', 't_shirt_2.JPG', 't_shirt_3.JPG']
   },
+  {
+    diller_profileId: 1,
+    product_title: 'Рубашка',
+    product_content: 'Замечательная, просторная, удобная, легкая, простая',
+    product_category: 'Одежда',
+    product_price: 2200,
+    product_specification: JSON.stringify({
+      "Размер": "52",
+      "Охват": "82",
+      "Материал": "Хлопок",
+      "Страна производитель": "Распалась"
+    }),
+    product_value: 100,
+    product_image: ['shirt_a_1.JPG', 'shirt_a_2.JPG']
+  },
+  {
+    diller_profileId: 1,
+    product_title: 'Устройство',
+    product_content: 'Замечательная, просторная, удобная, легкая, простая',
+    product_category: 'Электроника',
+    product_price: 2200,
+    product_specification: JSON.stringify({
+      "Размер": "52",
+      "Материал": "Сталь",
+      "Страна производитель": "Китай"
+    }),
+    product_value: 100,
+    product_image: ['pod_1.JPG', 'pod_2.JPG']
+  },
 ];
