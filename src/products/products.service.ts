@@ -68,7 +68,7 @@ export class ProductsService {
       where: {
         product_title: {
           search: searchText,
-        },
+        },  
       },
       include: {
         product_diller: true,

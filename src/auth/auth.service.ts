@@ -181,9 +181,9 @@ export class AuthService {
       include: {profile: true}
     })
 
-    if(RolesTypes[user!.roleId] === 'diller' && dto.profile_additional_info.length < 20) 
-      throw new BadRequestException('Описание у продавца не может быть меньше 20 символов')
-  
+    // if(RolesTypes[user!.roleId] === 'diller' && dto.profile_additional_info.length < 20) 
+    //   throw new BadRequestException('Описание у продавца не может быть меньше 20 символов')
+
     if(dto.profile_additional_info !== '') {
       return await this.prisma.profile.updateManyAndReturn({
         where: {
@@ -198,7 +198,8 @@ export class AuthService {
     else {
       return await this.prisma.profile.updateManyAndReturn({
         where: {
-          profile_id: +user!.profile!.profile_id
+          profile_id: +user!.profile!.profile_id,
+          profile_additional_info: user?.profile?.profile_additional_info
         },
         data: {
           profile_avatar: dto.avatar[0].filename
