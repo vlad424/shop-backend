@@ -65,10 +65,11 @@ export class ProductsService {
 
   async getProducts(searchText: string | undefined) {
     const products = await this.prisma.product.findMany({
+      //take: 1,
       where: {
         product_title: {
           search: searchText,
-        },  
+        },
       },
       include: {
         product_diller: true,
