@@ -1,4 +1,6 @@
 import {
+  BadGatewayException,
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -21,6 +23,21 @@ export class ProductsService {
     });
 
     return categories;
+  }
+
+  async getCategoryByName(categoryName: string | undefined) {
+    if(!categoryName) throw new BadRequestException("Произошла ошибка")
+
+    const category = await this.prisma.category.findFirst({
+      where: {category_title: categoryName},
+      include: {
+        category_products: true
+      }
+    })
+
+    if(!category) throw new NotFoundException('Такой категории нет')
+
+    return category
   }
 
   async getProduct(productId) {

@@ -33,6 +33,13 @@ export class ProductsController {
 
   @UseGuards(TokenGuard)
   @HttpCode(200)
+  @Get('categories/:category')
+  async getCategoryByName(@Param() param: { category: string }) {
+    return this.productsService.getCategoryByName(param.category)
+  }
+
+  @UseGuards(TokenGuard)
+  @HttpCode(200)
   @Get('')
   async getProducts(@Query() query: { searchText: string }) {
     return this.productsService.getProducts(
