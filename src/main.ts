@@ -7,7 +7,9 @@ async function bootstrap() {
   const PORT = process.env.PORT || 5000
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useStaticAssets(join(__dirname, '..', 'public/files'))
+  app.useStaticAssets(join(__dirname, '..', 'public/files'), {
+    setHeaders: (res, path, stat) => { res.set('Access-Control-Allow-Origin', '*'); }
+  })
 
   app.setGlobalPrefix('api')
   app.enableCors()
