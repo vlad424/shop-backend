@@ -31,7 +31,12 @@ export class ProductsService {
     const category = await this.prisma.category.findFirst({
       where: {category_title: categoryName},
       include: {
-        category_products: true
+        category_products: {
+          include: {
+            product_diller: true,
+            Category: true
+          }
+        }
       }
     })
 
