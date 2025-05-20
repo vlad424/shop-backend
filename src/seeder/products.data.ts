@@ -9,6 +9,10 @@ interface ProductData {
   product_image: string[]
 }
 
+export const modules = [
+  
+]
+
 export const products_data: Array<ProductData> = [
   {
     diller_profileId: 1,

@@ -155,7 +155,7 @@ export class ProductsService {
         product_categoryId: category.category_id,
 
         diller_profileId: diller!.profile!.profile_id,
-        product_image:filesPath
+        product_image: filesPath.reverse()
       },
     });
 
