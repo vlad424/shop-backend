@@ -4,7 +4,7 @@ import { products_data } from './products.data';
 
 // npx prisma db push --force-reset 
 // npx prisma db push
-// npx prisma db seed
+// npx prisma db seeder
 
 const prisma = new PrismaClient();
 

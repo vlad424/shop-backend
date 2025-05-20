@@ -30,7 +30,7 @@ export const products_data: Array<ProductData> = [
       "Размер": "52"
     }),
     product_value: 100,
-    product_image: ['top_1.JPG', 'top_2.JPG', 'top_3.JPG']
+    product_image: ['top_1.JPG', 'top_2.JPG', 'top_3.JPG', 'top3_zip.zip']
   },
   {
     diller_profileId: 1,
