@@ -30,10 +30,17 @@ export class OrderService {
     for(let i = 0; i < data.products.length; i++) {
       const product = await this.prisma.product.findUnique({
         where: {product_id: +data.products[i].productId},
-        select: {product_price: true}
+        select: {product_price: true, product_id: true, product_value: true}
       })
       
       if(!product) return 
+      
+      await this.prisma.product.update({
+        where: {product_id: +data.products[i].productId},
+        data: {
+          product_value: product.product_value - data.products[i].quantity 
+        }
+      })
 
       products.push(await this.prisma.orderItem.create({
         data: {
