@@ -65,6 +65,7 @@ model Product {
   product_content String
   product_price   Int
   product_value   Int
+  init_value      Int?
 
   product_image   String[]
   product_specification Json

@@ -4,7 +4,7 @@ import { products_data } from './products.data';
 
 // npx prisma db push --force-reset 
 // npx prisma db push
-// npx prisma db seeder
+// npm run seeder
 
 const prisma = new PrismaClient();
 
@@ -100,7 +100,8 @@ const products = async () => {
         product_title: products_data[i].product_title,
         product_value: products_data[i].product_value,
         product_image: products_data[i].product_image,
-        product_categoryId: category?.category_id  
+        product_categoryId: category?.category_id,
+        init_value: products_data[i].product_value
       }
     }))
   }

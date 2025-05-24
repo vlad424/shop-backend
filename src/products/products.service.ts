@@ -153,7 +153,7 @@ export class ProductsService {
         product_value: +dto.product_value,
         product_specification: dto.product_specification,
         product_categoryId: category.category_id,
-
+        init_value: +dto.product_value,
         diller_profileId: diller!.profile!.profile_id,
         product_image: filesPath.reverse()
       },
