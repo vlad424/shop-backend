@@ -2,6 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class createOrderDto {
   products: Array<orderItemDto>
+  address: string
 }
 
 export class orderItemDto {

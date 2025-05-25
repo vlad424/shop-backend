@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { createOrderDto } from './order.dto';
 import { OrderItem } from '@prisma/client';
@@ -44,6 +44,7 @@ export class OrderService {
 
       products.push(await this.prisma.orderItem.create({
         data: {
+          address: data.address,
           price: product.product_price,
           quantity: data.products[i].quantity,
           productId: data.products[i].productId,
@@ -56,5 +57,26 @@ export class OrderService {
       ...order,
       items: products
     };
+  }
+
+  async getAllOrders(profile_id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {id: profile_id, roleId: 2}
+    })
+
+    if(!user) throw new NotFoundException('Такого продавца нет')
+
+    const orders = await this.prisma.orderItem.findMany({
+      where: {
+        product: {
+          diller_profileId: profile_id
+        }
+      },
+      include: {
+        product: true,
+      }
+    })
+
+    return orders
   }
 }
