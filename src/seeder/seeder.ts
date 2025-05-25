@@ -56,6 +56,13 @@ const users = async () => {
         username: 'newcamer',
         roleId: 1,
       },
+      {
+        email: 'elic@gmail.com',
+        name: 'Александр Штопин',
+        password: await hash('12345678'),
+        username: 'elic',
+        roleId: 2,
+      }
     ],
     omit: {password: true}
   });
@@ -72,6 +79,13 @@ const users = async () => {
       {
         userId: 2,
         profile_additional_info: 'Не знаю что писать в этих 30 словах, но думаю порог пройден, user',
+      },
+      {
+        userId: 3,
+        address: 'г. Москва',
+        profie_diller_name: 'electric_shop',
+        profile_additional_info: 'Не знаю что писать в этих 30 словах, но думаю порог пройден',
+        TIN: '123456798'
       },
     ],
     omit: {profile_additional_info: true}

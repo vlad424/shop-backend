@@ -89,4 +89,41 @@ export const products_data: Array<ProductData> = [
     product_value: 100,
     product_image: ['pod_1.JPG', 'pod_2.JPG']
   },
+  {
+    diller_profileId: 3,
+    product_title: 'Iphone X',
+    product_content: 'Замечательная, просторная, удобная, легкая, простая',
+    product_category: 'Электроника',
+    product_price: 17900,
+    product_specification: JSON.stringify({
+      "Цвет": "Серебристый",
+      "Ёмкость": "256 ГБ",
+      "Длина": "143,6 мм",
+      "Ширина": "70,9 мм",
+      "Толщина": "7,7 мм",
+      "Вес": "174 г",
+      "Процессор": "A11 Bionic"
+    }),
+    product_value: 100,
+    product_image: ['iphone_x_1.JPG', 'iphone__x.zip']
+  },
+  {
+    diller_profileId: 3,
+    product_title: 'Iphone 12 PRO',
+    product_content: 'Смартфон Apple iPhone 12 Pro серебристого цвета характеризуется высокой производительностью и удобством. Модель оптимальна для общения в мессенджерах, просмотра страниц, разговоров, игр или создания фотографий в высоком качестве. OLED-экран обеспечивает передачу ярких и насыщенных оттенков. За высокую производительность отвечает 6-ядерный процессор A14 Bionic с тактовой частотой 3.1 ГГц.',
+    product_category: 'Электроника',
+    product_price: 57199,
+    product_specification: JSON.stringify({
+      "Цвет": "Серебристый",
+      "Ёмкость": "128 ГБ",
+      "Длина": "143,6 мм",
+      "Ширина": "71.5 мм",
+      "Толщина": "7.4 мм",
+      "Вес": "187 г",
+      "Процессор": "A14 Bionic",
+      "Разрешение экрана": "2532x1170"
+    }),
+    product_value: 100,
+    product_image: ['iphone12pro_1.webp', 'iphone_12_pro.zip']
+  },
 ];
