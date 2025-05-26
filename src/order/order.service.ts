@@ -19,6 +19,7 @@ export class OrderService {
       data: {
         profileId: profile.profile.profile_id,
         items: {},
+        status: 'PAYED'
       },
       include: {
         items: { include: { product: true } },
@@ -70,13 +71,28 @@ export class OrderService {
       where: {
         product: {
           diller_profileId: profile_id
+        },
+        order: {
+          status: 'PAYED'
         }
       },
       include: {
         product: true,
+        order: true
       }
     })
 
     return orders
+  }
+
+  async updateOrderById(order_id: number) {
+    const order = await this.prisma.order.update({
+      where: {id: order_id},
+      data: {
+        status: 'SHIPPED'
+      }
+    })
+
+    return order
   }
 }

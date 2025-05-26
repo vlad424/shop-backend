@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { TokenGuard } from 'src/guards/token.duard';
 import { createOrderDto } from './order.dto';
@@ -18,6 +18,13 @@ export class OrderController {
   @Get('')
   @HttpCode(200)
   async getAllOrders(@Req() req) {
+    return this.orderService.getAllOrders(+req.user.id)
+  }
+
+  @UseGuards(TokenGuard)
+  @Patch(':id')
+  @HttpCode(200)
+  async updateOrderById(@Req() req) {
     return this.orderService.getAllOrders(+req.user.id)
   }
 }
