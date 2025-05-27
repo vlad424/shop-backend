@@ -8,9 +8,10 @@ import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
 import { ReviewModule } from './review/review.module';
 import { StatsModule } from './stats/stats.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, ProductsModule, OrderModule, ReviewModule, StatsModule],
+  imports: [ConfigModule.forRoot(), AuthModule, ProductsModule, OrderModule, ReviewModule, StatsModule, FavoritesModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

@@ -85,13 +85,18 @@ export class OrderService {
     return orders
   }
 
-  async updateOrderById(order_id: number) {
-    const order = await this.prisma.order.update({
-      where: {id: order_id},
-      data: {
-        status: 'SHIPPED'
-      }
-    })
+  async updateOrderById(order_id: number[]) {
+    const order = await this.prisma.$transaction(
+      order_id.map((id) => this.prisma.order.update({
+        where: {id: id},
+        include: {
+          items: true
+        },
+        data: {
+          status: 'SHIPPED'
+        }
+      }))
+    )
 
     return order
   }

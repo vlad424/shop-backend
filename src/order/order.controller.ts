@@ -22,9 +22,9 @@ export class OrderController {
   }
 
   @UseGuards(TokenGuard)
-  @Patch(':id')
+  @Patch('update-order')
   @HttpCode(200)
-  async updateOrderById(@Req() req) {
-    return this.orderService.getAllOrders(+req.user.id)
+  async updateOrderById(@Body() data: {orderId: number[]}) {
+    return this.orderService.updateOrderById(data.orderId)
   }
 }
