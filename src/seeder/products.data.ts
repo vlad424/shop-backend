@@ -199,4 +199,36 @@ export const products_data: Array<ProductData> = [
     product_value: 1,
     product_image: ['gtx_1.webp', 'gtx_2.webps', 'gtx_750_ti.zip'],
   },
+  {
+    diller_profileId: 3,
+    product_title: 'Panteon GHP-960 W BT',
+    product_content:
+      'Беспроводные/проводные наушники Panteon GHP-960 W BT черного цвета совместимы со смартфонами, компьютерами, ноутбуками, игровыми консолями Nintendo Switch, PS4, PS5, Xbox One. Модель может подключаться к устройствм по Bluetooth',
+    product_category: 'Электроника',
+    product_price: 3099,
+    product_specification: JSON.stringify({
+      'Тип конструкции': 'Охватывающие',
+      'Материал корпуса': 'металл, пластик, экокожа',
+      'Материал амбушюр ': 'Экокожа',
+      'Подсветка': 'разноцветная'
+    }),
+    product_value: 1,
+    product_image: ['headers_1.webp', 'headers_2.webps', 'headphones.zip'],
+  },
+  {
+    diller_profileId: 3,
+    product_title: 'Intel Core i9-10900F OEM',
+    product_content:
+      'Принадлежащий к 10-му поколению процессор Intel Core i9-10900F OEM базируется на архитектуре Comet Lake. Устройство, базовая частота которого равна 2800 МГц, подходит для комплектации системных блоков высокого класса',
+    product_category: 'Электроника',
+    product_price: 22799,
+    product_specification: JSON.stringify({
+      'Сокет': 'LGA 1200',
+      'Год релиза': '2020',
+      'Общее количество ядер': '10',
+      'Объем кэша L2': '2.5 МБ'
+    }),
+    product_value: 1,
+    product_image: ['intel_1.webp', 'intel_2.webps', 'intel.zip'],
+  },
 ];
